@@ -160,7 +160,7 @@ class MWCCDCChatPlugin extends MantisPlugin {
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
         curl_setopt($ch, CURLOPT_USERPWD, sprintf('%s:%s', plugin_config_get('bot_email'), plugin_config_get('bot_token')));
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         $payload = array(
@@ -170,12 +170,11 @@ class MWCCDCChatPlugin extends MantisPlugin {
             'content' => $msg,
         );
 
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($payload));
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
         $result = curl_exec($ch);
-        if ($result !== 'ok') {
+        if (json_decode($result)->{'result'} !== 'success') {
             trigger_error(curl_errno($ch) . ': ' . curl_error($ch), E_USER_WARNING);
             plugin_error('ERROR_CURL', E_USER_ERROR);
         }
@@ -183,4 +182,3 @@ class MWCCDCChatPlugin extends MantisPlugin {
     }
 
 }
-
