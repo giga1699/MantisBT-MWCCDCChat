@@ -164,7 +164,7 @@ class MWCCDCChatPlugin extends MantisPlugin {
         $payload = array(
             'type'=> 'stream',
             'to' => $channel,
-            'topic' => $channelTopic
+            'topic' => $channelTopic,
             'content' => $msg,
         );
 
