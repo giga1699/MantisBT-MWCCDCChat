@@ -92,8 +92,6 @@ class MWCCDCChatPlugin extends MantisPlugin {
         $project = project_get_name($bug->project_id);
         $url = string_get_bug_view_url_with_fqdn($bug_id);
 
-        //plugin_config_get()team_group_format  team_channel_format   team_topic_format
-
         $greenGroup = plugin_config_get('green_team_chat_group');
         $teamGroup = preg_replace("/{project_name}/", $project, plugin_config_get('team_group_format'));
         $channel = preg_replace("/{project_name}/", $project, plugin_config_get('team_channel_format'));
