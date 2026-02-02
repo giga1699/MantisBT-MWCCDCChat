@@ -112,7 +112,7 @@ class MWCCDCChatPlugin extends MantisPlugin {
         $project = project_get_name($bug_updated->project_id);
 
         $channel = preg_replace("/{project_name}/", $project, plugin_config_get('team_channel_format'));
-        $channelTopic = preg_replace("/{bug_id}/", $bug_updated->bug_id, plugin_config_get('team_topic_format'));
+        $channelTopic = preg_replace("/{bug_id}/", $bug_updated->id, plugin_config_get('team_topic_format'));
 
         if (preg_match(plugin_config_get('team_channel_regex'), $channel) !== 1) return;
 
