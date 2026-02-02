@@ -174,7 +174,7 @@ class MWCCDCChatPlugin extends MantisPlugin {
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
         $result = curl_exec($ch);
-        print($result)
+        print($result);
         if (json_decode($result)->{'result'} != 'success') {
             trigger_error(curl_errno($ch) . ': ' . curl_error($ch), E_USER_WARNING);
             plugin_error('ERROR_CURL', E_USER_ERROR);
