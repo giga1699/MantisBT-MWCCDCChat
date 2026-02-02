@@ -100,7 +100,7 @@ class MWCCDCChatPlugin extends MantisPlugin {
         if (preg_match(plugin_config_get('team_channel_regex'), $channel) !== 1) return;
         if (preg_match(plugin_config_get('team_group_regex'), $teamGroup) !== 1) return;
 
-        $msg = sprintf("@*%s* @*%s* A new support ticket has been opened!\r\nLink to ticket: %s", $greenGroup, $teamGroup, $url);
+        $msg = sprintf("@*%s* @*%s* A new support ticket has been opened!\r\nTicket category: %s\r\nLink to ticket: %s", $greenGroup, $teamGroup, category_full_name( $bug->category_id, false ), $url);
 
         $this->notify($msg, $channel, $channelTopic);
     }
