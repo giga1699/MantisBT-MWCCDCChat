@@ -116,7 +116,7 @@ class MWCCDCChatPlugin extends MantisPlugin {
 
         if (preg_match(plugin_config_get('team_channel_regex'), $channel) !== 1) return;
 
-        $msg = sprintf("Support ticket has been updated.\r\nTicket status: **%s**", $bug_updated->status);
+        $msg = sprintf("Support ticket has been updated.\r\nTicket status: **%s**", MantisEnum::getLabel( lang_get( 'status_enum_string' ), $bug_updated->status));
 
         $this->notify($msg, $channel, $channelTopic);
     }
