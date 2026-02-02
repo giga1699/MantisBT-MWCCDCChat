@@ -159,7 +159,7 @@ class MWCCDCChatPlugin extends MantisPlugin {
         $url = sprintf('https://%s/api/v1/messages', plugin_config_get('chat_domain'));
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
-        curl_setopt($ch, CUROPT_USERPWD, sprintf('%s:$s', plugin_config_get('bot_email'), plugin_config_get('bot_token')));
+        curl_setopt($ch, CURLOPT_USERPWD, sprintf('%s:$s', plugin_config_get('bot_email'), plugin_config_get('bot_token')));
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
