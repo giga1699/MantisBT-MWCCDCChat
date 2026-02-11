@@ -128,7 +128,7 @@ class MWCCDCChatPlugin extends MantisPlugin {
         // Check if we're in the operations project
         if (preg_match("/" . plugin_config_get('operations_project') . "/", $project) === 1) {
             $channel = plugin_config_get('operations_channel');
-            $channelTopic = preg_replace("/{bug_id}/", $bug_id, plugin_config_get('team_topic_format'));
+            $channelTopic = preg_replace("/{bug_id}/", $bug_updated->id, plugin_config_get('team_topic_format'));
 
             $msg = sprintf("Support ticket has been updated.\r\nTicket status: **%s**\r\nAssigned to: **%s**", MantisEnum::getLabel( lang_get( 'status_enum_string' ), $bug_updated->status), empty($bug_updated->handler_id) ? "" : user_get_name($bug_updated->handler_id));
 
