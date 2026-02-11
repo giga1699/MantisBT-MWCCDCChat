@@ -97,7 +97,7 @@ class MWCCDCChatPlugin extends MantisPlugin {
 
         // Check if we're in the operations project
         if (preg_match("/" . plugin_config_get('operations_project') . "/", $project) === 1) {
-            $channel = plugin_config_get('operations_project');
+            $channel = plugin_config_get('operations_channel');
             $channelTopic = preg_replace("/{bug_id}/", $bug_id, plugin_config_get('team_topic_format'));
 
             $msg = sprintf("@*%s* A new support ticket has been opened!\r\nTicket category: **%s**\r\nLink to ticket: %s", plugin_config_get('operations_group'), category_full_name( $bug->category_id, false ), $url);
