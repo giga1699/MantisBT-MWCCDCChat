@@ -29,6 +29,9 @@ config_set_if_needed( 'team_topic_format' , gpc_get_bool( 'team_topic_format' ) 
 config_set_if_needed( 'team_group_format' , gpc_get_string( 'team_group_format' ) );
 config_set_if_needed( 'team_group_regex' , gpc_get_string( 'team_group_regex' ) );
 config_set_if_needed( 'green_team_chat_group' , gpc_get_string( 'green_team_chat_group' ) );
+config_set_if_needed( 'operations_project' , gpc_get_string( 'operations_project' ) );
+config_set_if_needed( 'operations_group' , gpc_get_string( 'operations_group' ) );
+config_set_if_needed( 'operations_channel' , gpc_get_string( 'operations_channel' ) );
 config_set_if_needed( 'notification_bug_report' , gpc_get_bool( 'notification_bug_report' ) );
 config_set_if_needed( 'notification_bug_update' , gpc_get_bool( 'notification_bug_update' ) );
 config_set_if_needed( 'notification_bugnote_add' , gpc_get_bool( 'notification_bugnote_add' ) );

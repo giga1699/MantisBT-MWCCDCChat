@@ -118,6 +118,33 @@ print_manage_menu( 'manage_plugin_page.php' );
 
     <tr>
       <td class="category">
+        Parent project for operations only tickets
+      </td>
+      <td colspan="2">
+        <input type="text" name="operations_project" value="<?php echo plugin_config_get( 'operations_project' )?>" />
+      </td>
+    </tr>
+
+    <tr>
+      <td class="category">
+        Zulip operations group to @
+      </td>
+      <td colspan="2">
+        <input type="text" name="operations_group" value="<?php echo plugin_config_get( 'operations_group' )?>" />
+      </td>
+    </tr>
+
+    <tr>
+      <td class="category">
+        Zulip operations channel for operations only tickets
+      </td>
+      <td colspan="2">
+        <input type="text" name="operations_channel" value="<?php echo plugin_config_get( 'operations_channel' )?>" />
+      </td>
+    </tr>
+
+    <tr>
+      <td class="category">
         Events to notify for
       </td>
       <td colspan="2">
