@@ -96,7 +96,7 @@ class MWCCDCChatPlugin extends MantisPlugin {
         $url = string_get_bug_view_url_with_fqdn($bug_id);
 
         // Check if we're in the operations project
-        if (preg_match(plugin_config_get('operations_project'), $project) == 1) {
+        if (preg_match("/" . plugin_config_get('operations_project') . "/", $project) === 1) {
             $channel = plugin_config_get('operations_project');
             $channelTopic = preg_replace("/{bug_id}/", $bug_id, plugin_config_get('team_topic_format'));
 
