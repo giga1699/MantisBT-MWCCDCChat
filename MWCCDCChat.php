@@ -27,7 +27,7 @@ class MWCCDCChatPlugin extends MantisPlugin {
         $this->name = "MWCCDCChat";
         $this->description = "Integrates with the MWCCDC chat system to provide notification of ticket events.";
         $this->page = 'config_page';
-        $this->version = '0.0.1';
+        $this->version = '0.0.2';
         $this->requires = array(
             'MantisCore' => '2.0.0',
         );
@@ -59,6 +59,9 @@ class MWCCDCChatPlugin extends MantisPlugin {
             'team_group_format' => "{project_name}",
             'team_group_regex' => "/^Team \d+/",
             'green_team_chat_group' => 'Green Team',
+            'operations_project' => 'CCDC',
+            'operations_group' => 'Black Team',
+            'operations_channel' => 'CCDC Support',
             'notification_bug_report' => true,
             'notification_bug_update' => true,
             'notification_bugnote_add' => true,
@@ -92,17 +95,28 @@ class MWCCDCChatPlugin extends MantisPlugin {
         $project = project_get_name($bug->project_id);
         $url = string_get_bug_view_url_with_fqdn($bug_id);
 
-        $greenGroup = plugin_config_get('green_team_chat_group');
-        $teamGroup = preg_replace("/{project_name}/", $project, plugin_config_get('team_group_format'));
-        $channel = preg_replace("/{project_name}/", $project, plugin_config_get('team_channel_format'));
-        $channelTopic = preg_replace("/{bug_id}/", $bug_id, plugin_config_get('team_topic_format'));
+        // Check if we're in the operations project
+        if (preg_match(plugin_config_get('operations_project'), $project) == 1) {
+            $channel = plugin_config_get('operations_project');
+            $channelTopic = preg_replace("/{bug_id}/", $bug_id, plugin_config_get('team_topic_format'));
 
-        if (preg_match(plugin_config_get('team_channel_regex'), $channel) !== 1) return;
-        if (preg_match(plugin_config_get('team_group_regex'), $teamGroup) !== 1) return;
+            $msg = sprintf("@*%s* A new support ticket has been opened!\r\nTicket category: **%s**\r\nLink to ticket: %s", plugin_config_get('operations_group'), category_full_name( $bug->category_id, false ), $url);
 
-        $msg = sprintf("@*%s* @*%s* A new support ticket has been opened!\r\nTicket category: **%s**\r\nLink to ticket: %s", $greenGroup, $teamGroup, category_full_name( $bug->category_id, false ), $url);
+            $this->notify($msg, $channel, $channelTopic);
+        }
+        else {
+            $greenGroup = plugin_config_get('green_team_chat_group');
+            $teamGroup = preg_replace("/{project_name}/", $project, plugin_config_get('team_group_format'));
+            $channel = preg_replace("/{project_name}/", $project, plugin_config_get('team_channel_format'));
+            $channelTopic = preg_replace("/{bug_id}/", $bug_id, plugin_config_get('team_topic_format'));
 
-        $this->notify($msg, $channel, $channelTopic);
+            if (preg_match(plugin_config_get('team_channel_regex'), $channel) !== 1) return;
+            if (preg_match(plugin_config_get('team_group_regex'), $teamGroup) !== 1) return;
+
+            $msg = sprintf("@*%s* @*%s* A new support ticket has been opened!\r\nTicket category: **%s**\r\nLink to ticket: %s", $greenGroup, $teamGroup, category_full_name( $bug->category_id, false ), $url);
+
+            $this->notify($msg, $channel, $channelTopic);
+        }
     }
 
     function bug_update($event, $bug_existing, $bug_updated) {
