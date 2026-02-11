@@ -125,14 +125,25 @@ class MWCCDCChatPlugin extends MantisPlugin {
     
         $project = project_get_name($bug_updated->project_id);
 
-        $channel = preg_replace("/{project_name}/", $project, plugin_config_get('team_channel_format'));
-        $channelTopic = preg_replace("/{bug_id}/", $bug_updated->id, plugin_config_get('team_topic_format'));
+        // Check if we're in the operations project
+        if (preg_match("/" . plugin_config_get('operations_project') . "/", $project) === 1) {
+            $channel = plugin_config_get('operations_channel');
+            $channelTopic = preg_replace("/{bug_id}/", $bug_id, plugin_config_get('team_topic_format'));
 
-        if (preg_match(plugin_config_get('team_channel_regex'), $channel) !== 1) return;
+            $msg = sprintf("Support ticket has been updated.\r\nTicket status: **%s**\r\nAssigned to: **%s**", MantisEnum::getLabel( lang_get( 'status_enum_string' ), $bug_updated->status), empty($bug_updated->handler_id) ? "" : user_get_name($bug_updated->handler_id));
 
-        $msg = sprintf("Support ticket has been updated.\r\nTicket status: **%s**\r\nAssigned to: **%s**", MantisEnum::getLabel( lang_get( 'status_enum_string' ), $bug_updated->status), empty($bug_updated->handler_id) ? "" : user_get_name($bug_updated->handler_id));
+            $this->notify($msg, $channel, $channelTopic);
+        }
+        else {
+            $channel = preg_replace("/{project_name}/", $project, plugin_config_get('team_channel_format'));
+            $channelTopic = preg_replace("/{bug_id}/", $bug_updated->id, plugin_config_get('team_topic_format'));
 
-        $this->notify($msg, $channel, $channelTopic);
+            if (preg_match(plugin_config_get('team_channel_regex'), $channel) !== 1) return;
+
+            $msg = sprintf("Support ticket has been updated.\r\nTicket status: **%s**\r\nAssigned to: **%s**", MantisEnum::getLabel( lang_get( 'status_enum_string' ), $bug_updated->status), empty($bug_updated->handler_id) ? "" : user_get_name($bug_updated->handler_id));
+
+            $this->notify($msg, $channel, $channelTopic);
+        }
     }
 
     function bug_action($event, $action, $bug_id) {
@@ -156,12 +167,20 @@ class MWCCDCChatPlugin extends MantisPlugin {
         $note = bugnote_get_text($bugnote_id);
         $msg = sprintf("A new note has been added to this ticket!\r\nNote text:\r\n```\r\n%s\r\n```\r\nLink to note: %s", $note, $url);
 
-        $channel = preg_replace("/{project_name}/", $project, plugin_config_get('team_channel_format'));
-        $channelTopic = preg_replace("/{bug_id}/", $bug_id, plugin_config_get('team_topic_format'));
+        // Check if we're in the operations project
+        if (preg_match("/" . plugin_config_get('operations_project') . "/", $project) === 1) {
+            $channel = plugin_config_get('operations_channel');
+            $channelTopic = preg_replace("/{bug_id}/", $bug_id, plugin_config_get('team_topic_format'));
+            $this->notify($msg, $channel, $channelTopic);
+        }
+        else {
+            $channel = preg_replace("/{project_name}/", $project, plugin_config_get('team_channel_format'));
+            $channelTopic = preg_replace("/{bug_id}/", $bug_id, plugin_config_get('team_topic_format'));
 
-        if (preg_match(plugin_config_get('team_channel_regex'), $channel) !== 1) return;
+            if (preg_match(plugin_config_get('team_channel_regex'), $channel) !== 1) return;
 
-        $this->notify($msg, $channel, $channelTopic);
+            $this->notify($msg, $channel, $channelTopic);
+        }
     }
 
     function notify($msg, $channel, $channelTopic) {
